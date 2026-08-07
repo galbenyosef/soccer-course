@@ -47,11 +47,11 @@ The owner (e.g. `Player`, `Ball`, `GameManager`) holds `switch_state(enum, data)
 
 - `Match` (`scenes/screens/tournament/match.gd`) — tracks home/away countries, goals, winner, final score. `increase_score(country_scored_on)` increments the *opposite* side. CPU-only matches `resolve()` with random scores.
 - `Tournament` (`scenes/screens/tournament/tournament.gd`) — 8-country single-elim bracket: `QUARTER_FINALS → SEMI_FINALS → FINAL → COMPLETE`. `advance()` resolves the current stage and seeds the next from winners.
-- `ActorsContainer` (`scenes/screens/world/actors_container.gd`) — spawns both 6-player squads from `DataLoader`, wires goals/control schemes, and runs CPU "on-duty" steering weights + player-swap logic (closest CPU to ball takes control when a human requests a swap).
+- `ActorsContainer` (`scenes/screens/world/actors_container.gd`) — spawns both 11-player squads from `DataLoader`, wires goals/control schemes, and runs CPU "on-duty" steering weights + player-swap logic (closest CPU to ball takes control when a human requests a swap).
 
 ### Players & ball
 
-- `Player` (CharacterBody2D): 6 per squad — 1 `GOALIE` + 5 outfield across `DEFENSE/MIDFIELD/OFFENSE`. `ControlScheme {CPU, P1, P2}`. `SkinColor` and team color are applied via the palette shader (not separate sprites). Has its own state machine (15 states incl. MOVING, TACKLING, SHOOTING, PASSING, HEADER, VOLLEY_KICK, BICYCLE_KICK, CELEBRATING, MOURNING…). AI is delegated to an `AIBehavior` (field vs goalie) built by `AIBehaviorFactory`.
+- `Player` (CharacterBody2D): 11 per squad — 1 `GOALIE` + 10 outfield in a 4-3-3 across `DEFENSE/MIDFIELD/OFFENSE`. `ControlScheme {CPU, P1, P2}`. `SkinColor` and team color are applied via the palette shader (not separate sprites). Has its own state machine (15 states incl. MOVING, TACKLING, SHOOTING, PASSING, HEADER, VOLLEY_KICK, BICYCLE_KICK, CELEBRATING, MOURNING…). AI is delegated to an `AIBehavior` (field vs goalie) built by `AIBehaviorFactory`.
 - `Ball` (AnimatableBody2D): 3 states (CARRIED, FREEFORM, SHOT). Custom `height`/`height_velocity` for a 2.5D bounce; sprite is offset `Vector2.UP * height`. `pass_to()` computes intensity from distance and friction; high passes arc. `scoring_raycast` points along velocity to detect the scoring area.
 - **Hitstop**: high-impact collisions `emit impact_received(pos, true)` → `GameManager` pauses the tree for `DURATION_IMPACT_PAUSE` (100ms), then unpauses in `_process`.
 
@@ -65,7 +65,7 @@ The owner (e.g. `Player`, `Ball`, `GameManager`) holds `switch_state(enum, data)
 - **Node access**: `%UniqueNodeName` (`@onready`) for scene-internal refs; `@export` for editor-wired dependencies (ball, goals, control scheme).
 - **Files**: each script gets its own `.gd` + an auto-generated `.gd.uid` (Godot 4 UID). Never hand-edit `.uid`/`.import` files.
 - **Communication**: prefer the `GameEvents` bus and the `state_transition_requested`/`setup` pattern over ad-hoc `get_node()`/signal wiring. Context is passed *into* states via `setup(...)`, not read from the parent tree.
-- **Assets**: `res://assets/{art,sfx,music,fonts,json}/`. Squads data is `assets/json/squads.json` (array of `{country, players:[{name, skin, role, speed, power}]}` × 6 players, indices map to `Player.SkinColor`/`Player.Role` enums). Flags: `assets/art/ui/flags/flag-<COUNTRY_LOWER>.png`, cached by `FlagHelper`.
+- **Assets**: `res://assets/{art,sfx,music,fonts,json}/`. Squads data is `assets/json/squads.json` (array of `{country, players:[{name, skin, role, speed, power}]}` × 11 players in canonical order `[GOALIE, DEFENSE×4, MIDFIELD×3, OFFENSE×3]`, indices map to `Player.SkinColor`/`Player.Role` enums). Flags: `assets/art/ui/flags/flag-<COUNTRY_LOWER>.png`, cached by `FlagHelper`.
 - **Physics layers** (see `[layer_names]`): `PitchWalls`, `Player`, `Ball`, `InvisibleWalls`, `ScoringArea`, `GoalKeeperHands`.
 - **Input map** (`project.godot` `[input]`): P1 = arrow keys + `[` (pass) / `]` (shoot); P2 = WASD + `0` (pass) / `1` (shoot). Game modes: single-player (P2 empty), versus, co-op (both pick the same country).
 
@@ -73,5 +73,5 @@ The owner (e.g. `Player`, `Ball`, `GameManager`) holds `switch_state(enum, data)
 
 - Adding a new **state**: create the `*State` subclass, register `Enum → Class` in the matching `*StateFactory._init()`, add the enum value to the owner's `State` enum. If it needs payload, extend the `*StateData` builder.
 - Adding a **screen**: add to `SoccerGame.ScreenType` + `ScreenFactory`, extend `Screen`, set its `music` export.
-- Adding a **team/country**: add to `squads.json` (6 players), drop a `flag-<name>.png`, and note that `Tournament` slices `countries[1..9]` (index 0 is `"DEFAULT"` placeholder) — keep 8 real teams after DEFAULT for the bracket.
+- Adding a **team/country**: add to `squads.json` (11 players, canonical role order), drop a `flag-<name>.png`, and note that `Tournament` slices `countries[1..9]` (index 0 is `"DEFAULT"` placeholder) — keep 8 real teams after DEFAULT for the bracket.
 - Keep the viewport/scaling and nearest-filter settings intact — they define the pixel-art look.

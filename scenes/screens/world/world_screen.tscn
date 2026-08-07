@@ -23,8 +23,8 @@ music = 1
 [node name="Camera" type="Camera2D" parent="." node_paths=PackedStringArray("ball")]
 limit_left = 0
 limit_top = 0
-limit_right = 850
-limit_bottom = 360
+limit_right = 1275
+limit_bottom = 540
 position_smoothing_enabled = true
 script = ExtResource("1_a8rjt")
 ball = NodePath("../ActorsContainer/Ball")
@@ -35,16 +35,19 @@ ball = NodePath("../ActorsContainer/Ball")
 modulate = Color(0.517647, 0.803922, 0.164706, 1)
 texture = ExtResource("2_xdlr3")
 centered = false
+scale = Vector2(1.5, 1.5)
 
 [node name="Pattern" type="Sprite2D" parent="Backgrounds"]
 modulate = Color(0.282353, 0.607843, 0, 1)
 texture = ExtResource("3_4dvkn")
 centered = false
+scale = Vector2(1.5, 1.5)
 
 [node name="Lines" type="Sprite2D" parent="Backgrounds"]
 modulate = Color(0.941176, 0.941176, 0.941176, 1)
 texture = ExtResource("4_dy54j")
 centered = false
+scale = Vector2(1.5, 1.5)
 
 [node name="ActorsContainer" type="Node2D" parent="." node_paths=PackedStringArray("ball", "goal_home", "goal_away")]
 y_sort_enabled = true
@@ -55,50 +58,70 @@ goal_away = NodePath("PitchObjects/GoalAway")
 
 [node name="Spawns" type="Node2D" parent="ActorsContainer"]
 unique_name_in_owner = true
-position = Vector2(425, 180)
+position = Vector2(638, 270)
 
 [node name="GoaliePosition" type="Node2D" parent="ActorsContainer/Spawns"]
-position = Vector2(-345, 1)
+position = Vector2(-518, 0)
 
 [node name="DefensePosition" type="Node2D" parent="ActorsContainer/Spawns"]
-position = Vector2(-235, -30)
+position = Vector2(-375, -180)
 
 [node name="DefensePosition2" type="Node2D" parent="ActorsContainer/Spawns"]
-position = Vector2(-235, 30)
+position = Vector2(-375, -60)
+
+[node name="DefensePosition3" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-375, 60)
+
+[node name="DefensePosition4" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-375, 180)
 
 [node name="MidfieldPosition" type="Node2D" parent="ActorsContainer/Spawns"]
-position = Vector2(-125, 0)
+position = Vector2(-210, -135)
+
+[node name="MidfieldPosition2" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-210, 0)
+
+[node name="MidfieldPosition3" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-210, 135)
 
 [node name="OffensePosition" type="Node2D" parent="ActorsContainer/Spawns"]
-position = Vector2(-25, -80)
+position = Vector2(-68, -95)
 
 [node name="OffensePosition2" type="Node2D" parent="ActorsContainer/Spawns"]
-position = Vector2(-25, 80)
+position = Vector2(-68, 0)
+
+[node name="OffensePosition3" type="Node2D" parent="ActorsContainer/Spawns"]
+position = Vector2(-68, 95)
 
 [node name="KickOffs" type="Node2D" parent="ActorsContainer"]
 unique_name_in_owner = true
-position = Vector2(425, 180)
+position = Vector2(638, 270)
 
 [node name="KickOffPosition" type="Node2D" parent="ActorsContainer/KickOffs"]
-position = Vector2(-10, 0)
+position = Vector2(-22, -95)
 
 [node name="KickOffPosition2" type="Node2D" parent="ActorsContainer/KickOffs"]
-position = Vector2(-5, 30)
+position = Vector2(-15, 0)
+
+[node name="KickOffPosition3" type="Node2D" parent="ActorsContainer/KickOffs"]
+position = Vector2(-22, 95)
 
 [node name="PitchObjects" type="Node2D" parent="ActorsContainer"]
 y_sort_enabled = true
 
 [node name="GoalHome" parent="ActorsContainer/PitchObjects" instance=ExtResource("6_hitmj")]
-position = Vector2(32, 220)
+position = Vector2(48, 330)
+scale = Vector2(1.5, 1.5)
 
 [node name="GoalAway" parent="ActorsContainer/PitchObjects" instance=ExtResource("6_hitmj")]
-position = Vector2(818, 220)
-scale = Vector2(-1, 1)
+position = Vector2(1227, 330)
+scale = Vector2(-1.5, 1.5)
 
 [node name="TopWall" type="Sprite2D" parent="ActorsContainer/PitchObjects"]
-position = Vector2(49, 32)
+position = Vector2(74, 48)
 texture = ExtResource("7_70g5m")
 centered = false
+scale = Vector2(1.5, 1.5)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="ActorsContainer/PitchObjects/TopWall"]
 collision_mask = 0
@@ -107,10 +130,11 @@ collision_mask = 0
 polygon = PackedVector2Array(0, 116, 13, 0, 739, 0, 752, 116, 740, 116, 727, 12, 25, 12, 13, 116)
 
 [node name="BottomWall" type="Sprite2D" parent="ActorsContainer/PitchObjects"]
-position = Vector2(24, 344)
+position = Vector2(36, 516)
 texture = ExtResource("8_dfmiw")
 centered = false
 offset = Vector2(0, -12)
+scale = Vector2(1.5, 1.5)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="ActorsContainer/PitchObjects/BottomWall"]
 collision_mask = 0
@@ -120,10 +144,11 @@ position = Vector2(401, -3.5)
 shape = SubResource("RectangleShape2D_w7kh3")
 
 [node name="LeftWall" type="Sprite2D" parent="ActorsContainer/PitchObjects"]
-position = Vector2(24, 221)
+position = Vector2(36, 332)
 texture = ExtResource("9_cwmqy")
 centered = false
 offset = Vector2(0, -14)
+scale = Vector2(1.5, 1.5)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="ActorsContainer/PitchObjects/LeftWall"]
 collision_mask = 0
@@ -132,8 +157,8 @@ collision_mask = 0
 polygon = PackedVector2Array(14, -1, 30, -1, 14, 116, 0, 116)
 
 [node name="RightWall" type="Sprite2D" parent="ActorsContainer/PitchObjects"]
-position = Vector2(827, 222)
-scale = Vector2(-1, 1)
+position = Vector2(1241, 333)
+scale = Vector2(-1.5, 1.5)
 texture = ExtResource("9_cwmqy")
 centered = false
 offset = Vector2(0, -14)
@@ -145,7 +170,7 @@ collision_mask = 0
 polygon = PackedVector2Array(14, -1, 30, -1, 14, 116, 0, 116)
 
 [node name="Ball" parent="ActorsContainer" instance=ExtResource("10_8m3kx")]
-position = Vector2(424, 181)
+position = Vector2(636, 272)
 
 [node name="UI" parent="." instance=ExtResource("11_rs40n")]
 
